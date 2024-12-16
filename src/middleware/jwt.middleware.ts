@@ -12,7 +12,7 @@ export class JwtMiddleware implements NestMiddleware {
   use(req: any, res: any, next: () => void) {
     const authHeader = req.headers['authorization'];
     if (!authHeader) {
-      throw new UnauthorizedException('Authorization header missing 13');
+      throw new UnauthorizedException('Authorization header missing');
     }
 
     const token = authHeader.split(' ')[1];

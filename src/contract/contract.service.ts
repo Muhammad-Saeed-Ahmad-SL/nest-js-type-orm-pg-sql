@@ -1,9 +1,14 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Contract } from './entity/contract.entity';
 import { CreateContractDto } from './dto/create-contract.dto';
 import { User } from 'src/user/entity/user.entity';
+import { isUUID } from 'class-validator';
 
 @Injectable()
 export class ContractService {
@@ -12,12 +17,20 @@ export class ContractService {
     private readonly contractRepository: Repository<Contract>,
   ) {}
 
+  private validateUUID(id: string): void {
+    if (!isUUID(id)) {
+      throw new BadRequestException(`${id} is not a valid UUID`);
+    }
+  }
+
   async createContract(contractData: CreateContractDto): Promise<Contract> {
     const { employees, ...contractDetails } = contractData;
 
     let employeeEntities: User[] = [];
     if (employees && employees.length > 0) {
       // Fetch the User entities based on the provided employee IDs
+      employees.forEach((employeeId) => this.validateUUID(employeeId));
+
       employeeEntities = await this.contractRepository.manager
         .getRepository(User)
         .findByIds(employees);
@@ -40,6 +53,7 @@ export class ContractService {
   }
 
   async getContractById(contractId: string): Promise<Contract> {
+    this.validateUUID(contractId);
     const contract = await this.contractRepository.findOne({
       where: { contractId },
       relations: ['employees'],
@@ -54,12 +68,14 @@ export class ContractService {
     contractId: string,
     updateData: Partial<Contract>,
   ): Promise<Contract> {
+    this.validateUUID(contractId);
     const contract = await this.getContractById(contractId);
     Object.assign(contract, updateData);
     return await this.contractRepository.save(contract);
   }
 
   async deleteContract(contractId: string): Promise<void> {
+    this.validateUUID(contractId);
     const contract = await this.getContractById(contractId);
     await this.contractRepository.remove(contract);
   }
