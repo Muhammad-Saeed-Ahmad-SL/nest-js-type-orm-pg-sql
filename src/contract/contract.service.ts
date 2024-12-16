@@ -9,6 +9,7 @@ import { Contract } from './entity/contract.entity';
 import { CreateContractDto } from './dto/create-contract.dto';
 import { User } from 'src/user/entity/user.entity';
 import { isUUID } from 'class-validator';
+import { UpdateContractDto } from './dto/update-contract.dto';
 
 @Injectable()
 export class ContractService {
@@ -36,7 +37,7 @@ export class ContractService {
         .findByIds(employees);
 
       if (employeeEntities.length !== employees.length) {
-        throw new NotFoundException('One or more employees not found');
+        throw new NotFoundException('Employee not found');
       }
     }
 
@@ -66,7 +67,7 @@ export class ContractService {
 
   async updateContract(
     contractId: string,
-    updateData: Partial<Contract>,
+    updateData: UpdateContractDto,
   ): Promise<Contract> {
     this.validateUUID(contractId);
     const contract = await this.getContractById(contractId);

@@ -21,6 +21,7 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import { UpdateContractDto } from './dto/update-contract.dto';
 
 @Controller('contracts')
 @ApiTags('Contracts')
@@ -99,7 +100,7 @@ export class ContractController {
   })
   async updateContract(
     @Param('id') contractId: string,
-    @Body() updateData: Partial<Contract>,
+    @Body() updateData: UpdateContractDto,
   ) {
     return await this.contractService.updateContract(contractId, updateData);
   }

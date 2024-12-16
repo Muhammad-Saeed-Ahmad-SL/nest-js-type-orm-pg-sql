@@ -6,18 +6,19 @@ import {
   IsDateString,
   IsArray,
   IsUUID,
+  IsBoolean,
 } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
 import {
   ContractStatus,
   ContractType,
   PaymentFrequency,
 } from '../enum/contract.enum';
-import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateContractDto {
   @ApiProperty({
     description: 'Title of the contract',
-    example: 'Software Engineer Contract',
+    example: 'Senior Developer Contract',
   })
   @IsString()
   contractTitle: string;
@@ -32,7 +33,7 @@ export class CreateContractDto {
   @ApiProperty({
     description: 'End date of the contract',
     required: false,
-    example: '2024-12-31T00:00:00Z',
+    example: '2025-01-01T00:00:00Z',
   })
   @IsDateString()
   @IsOptional()
@@ -58,7 +59,8 @@ export class CreateContractDto {
 
   @ApiProperty({
     description: 'Base salary for the contract',
-    example: 60000,
+    example: 70000,
+    type: Number,
   })
   @IsNumber()
   baseSalary: number;
@@ -82,6 +84,7 @@ export class CreateContractDto {
     description: 'Increment percentage for the salary',
     required: false,
     example: 5,
+    type: Number,
   })
   @IsNumber()
   @IsOptional()
@@ -90,7 +93,7 @@ export class CreateContractDto {
   @ApiProperty({
     description: 'Tenure for the increment',
     required: false,
-    example: '12 months',
+    example: '1 year',
   })
   @IsString()
   @IsOptional()
@@ -100,6 +103,7 @@ export class CreateContractDto {
     description: 'Bonus amount',
     required: false,
     example: 5000,
+    type: Number,
   })
   @IsNumber()
   @IsOptional()
@@ -109,6 +113,7 @@ export class CreateContractDto {
     description: 'Allowance for the contract',
     required: false,
     example: 2000,
+    type: Number,
   })
   @IsNumber()
   @IsOptional()
@@ -117,7 +122,8 @@ export class CreateContractDto {
   @ApiProperty({
     description: 'Tax deductions for the contract',
     required: false,
-    example: 2000,
+    example: 1000,
+    type: Number,
   })
   @IsNumber()
   @IsOptional()
@@ -127,6 +133,7 @@ export class CreateContractDto {
     description: 'Paid leave days',
     required: false,
     example: 15,
+    type: Number,
   })
   @IsNumber()
   @IsOptional()
@@ -136,6 +143,7 @@ export class CreateContractDto {
     description: 'Sick leave days',
     required: false,
     example: 10,
+    type: Number,
   })
   @IsNumber()
   @IsOptional()
@@ -145,6 +153,7 @@ export class CreateContractDto {
     description: 'Vacation days',
     required: false,
     example: 20,
+    type: Number,
   })
   @IsNumber()
   @IsOptional()
@@ -153,7 +162,7 @@ export class CreateContractDto {
   @ApiProperty({
     description: 'Leave encashment policy',
     required: false,
-    example: 'Leave encashment is available after 1 year.',
+    example: 'Unused leaves are encashable',
   })
   @IsString()
   @IsOptional()
@@ -163,7 +172,9 @@ export class CreateContractDto {
     description: 'Health insurance status',
     required: false,
     example: true,
+    type: Boolean,
   })
+  @IsBoolean()
   @IsOptional()
   healthInsurance: boolean;
 
@@ -171,6 +182,7 @@ export class CreateContractDto {
     description: 'Medical allowance',
     required: false,
     example: 1000,
+    type: Number,
   })
   @IsNumber()
   @IsOptional()
@@ -179,7 +191,7 @@ export class CreateContractDto {
   @ApiProperty({
     description: 'Other benefits',
     required: false,
-    example: 'Company car, gym membership',
+    example: 'Gym membership, free meals',
   })
   @IsString()
   @IsOptional()
@@ -188,7 +200,7 @@ export class CreateContractDto {
   @ApiProperty({
     description: 'Terms and conditions',
     required: false,
-    example: 'Employment is subject to company policies.',
+    example: 'All terms as agreed upon signing',
   })
   @IsString()
   @IsOptional()
@@ -198,14 +210,16 @@ export class CreateContractDto {
     description: 'Confidentiality clause',
     required: false,
     example: true,
+    type: Boolean,
   })
+  @IsBoolean()
   @IsOptional()
   confidentialityClause: boolean;
 
   @ApiProperty({
     description: 'Notice period',
     required: false,
-    example: '30 days',
+    example: '2 months',
   })
   @IsString()
   @IsOptional()
@@ -223,7 +237,7 @@ export class CreateContractDto {
   @ApiProperty({
     description: 'Early termination clause',
     required: false,
-    example: 'Employer can terminate the contract with 1-month notice.',
+    example: 'Allowed with prior notice',
   })
   @IsString()
   @IsOptional()
@@ -232,7 +246,7 @@ export class CreateContractDto {
   @ApiProperty({
     description: 'Special conditions',
     required: false,
-    example: 'Must complete a background check.',
+    example: 'Non-compete clause applies',
   })
   @IsString()
   @IsOptional()
@@ -242,23 +256,29 @@ export class CreateContractDto {
     description: 'Approved by HR',
     required: false,
     example: true,
+    type: Boolean,
   })
+  @IsBoolean()
   @IsOptional()
   approvedByHR: boolean;
 
   @ApiProperty({
     description: 'Signed by employee',
     required: false,
-    example: true,
+    example: false,
+    type: Boolean,
   })
+  @IsBoolean()
   @IsOptional()
   signedByEmployee: boolean;
 
   @ApiProperty({
     description: 'Signed by employer',
     required: false,
-    example: true,
+    example: false,
+    type: Boolean,
   })
+  @IsBoolean()
   @IsOptional()
   signedByEmployer: boolean;
 
@@ -271,5 +291,5 @@ export class CreateContractDto {
   @IsArray()
   @IsOptional()
   @IsUUID('4', { each: true })
-  employees: string[]; // Employee IDs
+  employees: string[];
 }
