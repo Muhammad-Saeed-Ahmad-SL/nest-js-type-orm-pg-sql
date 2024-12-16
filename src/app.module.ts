@@ -9,6 +9,8 @@ import { User } from './user/entity/user.entity';
 import { AuthModule } from './auth/auth.module';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtMiddleware } from './middleware/jwt.middleware';
+import { ContractModule } from './contract/contract.module';
+import { Contract } from './contract/entity/contract.entity';
 
 @Module({
   imports: [
@@ -25,12 +27,13 @@ import { JwtMiddleware } from './middleware/jwt.middleware';
       username: 'postgres',
       password: 'password',
       database: 'typeorm-books-api',
-      entities: [Book, User],
+      entities: [Book, User, Contract],
       synchronize: true,
     }),
     BookModule,
     UserModule,
     AuthModule,
+    ContractModule,
   ],
   controllers: [AppController],
   providers: [AppService],

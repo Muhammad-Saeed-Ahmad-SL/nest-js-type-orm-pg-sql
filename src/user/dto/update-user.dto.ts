@@ -1,4 +1,10 @@
-import { IsEmail, MinLength, IsArray, IsOptional } from 'class-validator';
+import {
+  IsEmail,
+  MinLength,
+  IsArray,
+  IsOptional,
+  IsUUID,
+} from 'class-validator';
 import { Role } from '../enums/role.enum';
 
 export class UpdateUserDto {
@@ -15,4 +21,9 @@ export class UpdateUserDto {
   @IsArray()
   @IsOptional()
   roles?: Role[];
+
+  @IsArray()
+  @IsOptional()
+  @IsUUID('4', { each: true })
+  contracts: string[];
 }

@@ -21,7 +21,7 @@ export class JwtMiddleware implements NestMiddleware {
       req.user = decoded;
       next();
     } catch (err) {
-      throw new UnauthorizedException('Invalid token 456');
+      throw new UnauthorizedException('Invalid token');
     }
   }
 }

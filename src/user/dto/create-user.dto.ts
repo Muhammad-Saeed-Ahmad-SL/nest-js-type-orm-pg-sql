@@ -4,6 +4,8 @@ import {
   MinLength,
   IsArray,
   ArrayNotEmpty,
+  IsOptional,
+  IsUUID,
 } from 'class-validator';
 import { Role } from '../enums/role.enum';
 
@@ -21,4 +23,9 @@ export class CreateUserDto {
   @IsArray()
   @ArrayNotEmpty()
   roles: Role[];
+
+  @IsArray()
+  @IsOptional()
+  @IsUUID('4', { each: true })
+  contracts: string[];
 }

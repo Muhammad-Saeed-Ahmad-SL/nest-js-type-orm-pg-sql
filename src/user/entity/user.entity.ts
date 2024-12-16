@@ -1,6 +1,13 @@
 import { Book } from 'src/book/entity/book.entity';
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  ManyToMany,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Role } from '../enums/role.enum';
+import { Contract } from 'src/contract/entity/contract.entity';
 
 @Entity()
 export class User {
@@ -21,4 +28,7 @@ export class User {
 
   @OneToMany(() => Book, (book) => book.user)
   books: Book[];
+
+  @ManyToMany(() => Contract, (contract) => contract.employees)
+  contracts: Contract[];
 }
