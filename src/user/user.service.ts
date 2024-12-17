@@ -9,6 +9,7 @@ import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { Contract } from '../contract/entity/contract.entity';
 import { isUUID } from 'class-validator';
+import { Role } from './enums/role.enum';
 
 @Injectable()
 export class UserService {
@@ -92,5 +93,25 @@ export class UserService {
     this.validateUUID(id);
     const user = await this.findUserById(id);
     await this.userRepository.remove(user);
+  }
+
+  async validateGoogleUser(googleUser: CreateUserDto) {
+    const email = googleUser.email;
+    const user = await this.userRepository.findOne({ where: { email } });
+
+    if (user) {
+      return user;
+    }
+
+    const newUser = this.userRepository.create({
+      name: googleUser.name || 'Google User', // Default name if missing
+      email: googleUser.email,
+      password: '', // Password is empty for OAuth users
+      roles: [Role.Employee], // Assign default role
+      contracts: [], // No contracts by default
+    });
+
+    // Save the new user to the database
+    return await this.userRepository.save(newUser);
   }
 }

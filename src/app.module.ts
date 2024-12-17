@@ -1,4 +1,9 @@
-import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import {
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+  RequestMethod,
+} from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -11,9 +16,13 @@ import { JwtModule } from '@nestjs/jwt';
 import { JwtMiddleware } from './middleware/jwt.middleware';
 import { ContractModule } from './contract/contract.module';
 import { Contract } from './contract/entity/contract.entity';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
     JwtModule.register({
       secret: 'secret',
       signOptions: {
@@ -42,7 +51,7 @@ export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(JwtMiddleware)
-      .exclude('/auth/login', '/auth/register')
+      .exclude({ path: '/auth/(.*)', method: RequestMethod.ALL })
       .forRoutes('*');
   }
 }
